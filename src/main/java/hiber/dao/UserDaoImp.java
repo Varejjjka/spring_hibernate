@@ -13,31 +13,29 @@ import java.util.List;
 @Repository
 public class UserDaoImp implements UserDao {
 
-   @Autowired
-   private SessionFactory sessionFactory;
+    @Autowired
+    private SessionFactory sessionFactory;
 
-   @Override
-   public void add(User user) {
-      sessionFactory.getCurrentSession().save(user);
-   }
+    @Override
+    public void add(User user) {
+        sessionFactory.getCurrentSession().save(user);
+    }
 
-   @Override
-   @SuppressWarnings("unchecked")
-   public List<User> listUsers() {
-      TypedQuery<User> query=sessionFactory.getCurrentSession().createQuery("from User");
-      return query.getResultList();
-   }
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> listUsers() {
+        TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("from User");
+        return query.getResultList();
+    }
 
-   @Override
-   public List<User> getUser(String model, int series) {
-      Session session = sessionFactory.getCurrentSession();
-      String hql = "SELECT a FROM User a INNER JOIN a.car c WHERE c.model = :model and c.series = :series";
-      Query query = session.createQuery(hql);
-      query.setParameter("model", model);
-      query.setParameter("series", series);
-      List<User> list = query.getResultList();
-      return list;
-
-
-   }
+    @Override
+    public List<User> getUser(String model, int series) {
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "FROM User WHERE car.model = :model and car.series = :series";
+        Query query = session.createQuery(hql);
+        query.setParameter("model", model);
+        query.setParameter("series", series);
+        List<User> list = query.getResultList();
+        return list;
+    }
 }
